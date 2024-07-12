@@ -4,72 +4,147 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     tools:context=".MainActivity">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+
+        <ImageButton
+            android:id="@+id/emergency_light_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:src="@drawable/emergency_black_icon" />
+
+        <ImageButton
+            android:id="@+id/hazard_light_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="@android:color/transparent"
+            android:src="@drawable/hazard_light_off_icon" />
+
+        <ImageButton
+            android:id="@+id/head_light_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/hazard_light_btn"
+            android:layout_marginTop="10dp"
+            android:background="@android:color/transparent"
+            android:src="@drawable/car_head_light_off" />
+
+        <ImageButton
+            android:id="@+id/sensor_light_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/hazard_light_btn"
+            android:layout_marginTop="10dp"
+            android:background="@android:color/transparent"
+            android:src="@drawable/car_sensor_on" />
+
+    </LinearLayout>
 
     <EditText
         android:id="@+id/key_edt"
         android:layout_width="350dp"
         android:layout_height="50dp"
         android:layout_centerHorizontal="true"
-        android:hint="Enter Key to start"/>
+        android:hint="Enter Key to start" />
 
     <LinearLayout
         android:id="@+id/fb_layout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toLeftOf="@id/right_btn"
         android:layout_centerVertical="true"
+        android:layout_toLeftOf="@id/right_btn"
         android:orientation="vertical">
 
-        <Button
+        <ImageButton
             android:id="@+id/forward_btn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:background="@android:color/transparent"
+            android:src="@drawable/select_triangle_square_arrow_top_icon"
             android:text="Front" />
 
-        <Button
+        <ImageButton
             android:id="@+id/backward_btn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
             android:layout_alignParentEnd="true"
+            android:layout_marginTop="20dp"
+            android:background="@android:color/transparent"
+            android:src="@drawable/select_triangle_square_arrow_bottom_icon"
             android:text="Back" />
     </LinearLayout>
 
-    <Button
+    <ImageButton
         android:id="@+id/left_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_centerVertical="true"
         android:layout_toLeftOf="@id/fb_layout"
-        android:text="left"
-        android:layout_centerVertical="true"/>
+        android:background="@android:color/transparent"
+        android:src="@drawable/select_triangle_square_arrow_left_icon"
+        android:text="left" />
 
-    <Button
+    <ImageButton
         android:id="@+id/right_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
         android:layout_alignParentEnd="true"
-        android:text="right"
-        android:layout_centerVertical="true"/>
+        android:layout_centerVertical="true"
+        android:layout_marginEnd="20dp"
+        android:background="@android:color/transparent"
+        android:src="@drawable/select_triangle_square_arrow_right_icon"
+        android:text="right" />
 
     <TextView
         android:id="@+id/response_message_tv"
         android:layout_width="350dp"
         android:layout_height="50dp"
         android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="20dp"/>
+        android:layout_marginBottom="20dp"
+        android:hint="Message from car" />
 
     <Button
         android:id="@+id/start_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
         android:layout_marginTop="10dp"
         android:layout_marginEnd="10dp"
-        android:layout_alignParentEnd="true"
+        android:text="start" />
 
-        android:text="right"
-        />
+    <ImageButton
+        android:id="@+id/left_indicator_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/fb_layout"
+        android:layout_marginTop="30dp"
+        android:layout_marginEnd="20dp"
+        android:layout_toLeftOf="@id/right_indicator_btn"
+        android:background="@android:color/transparent"
+        android:src="@drawable/left_indicator_off_icon"
+        android:text="left indicator" />
+
+    <ImageButton
+        android:id="@+id/right_indicator_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/fb_layout"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="30dp"
+        android:layout_marginEnd="60dp"
+        android:background="@android:color/transparent"
+        android:src="@drawable/right_indicator_off_icon"
+        android:text="right indicator" />
 
 </RelativeLayout>

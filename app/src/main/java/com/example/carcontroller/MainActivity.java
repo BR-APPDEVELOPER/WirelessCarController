@@ -9,8 +9,8 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -21,14 +21,15 @@ import java.net.URL;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
-import okhttp3.MediaType;
 import okhttp3.Response;
 import okhttp3.FormBody;
 
 
 public class MainActivity extends AppCompatActivity implements FetchData.DataListener {
 
-    Button frontBtn, backBtn, leftBtn, rightBtn, startBtn;
+    ImageButton frontBtn, backBtn, leftBtn, rightBtn;
+    ImageButton emergencyLightBtn, hazardLightBtn, frontLightBtn, carSensorBtn, leftIndicatorBtn, rightIndicatorBtn;
+    Button startBtn;
     TextView responseMsgTv;
     EditText keyEdt;
 
@@ -37,13 +38,23 @@ public class MainActivity extends AppCompatActivity implements FetchData.DataLis
     private static final String MOTOR_RIGHT_DIRECTION_URL = "http://192.168.43.168/motor/turnright";
     private static final String MOTOR_LEFT_DIRECTION_URL = "http://192.168.43.168/motor/turnleft";
     private static final String CAR_START_KEY_URL = "http://192.168.43.168/startcar";
+    private static final String HAZARD_LIGHT_URL = "http://192.168.43.168/car/hazardlight";
+    private static final String HEAD_LIGHT_ON_URL = "http://192.168.43.168/car/frontlight/on";
+    private static final String HEAD_LIGHT_OFF_URL = "http://192.168.43.168/car/frontlight/off";
+    private static final String CAR_SENSOR_URL = "http://192.168.43.168/car/sensors";
+    private static final String LEFT_INDICATOR_URL = "http://192.168.43.168/car/left_indicator";
+    private static final String RIGHT_INDICATOR_URL = "http://192.168.43.168/car/right_indicator";
 
     private static final int INTERVAL = 1000; // 5 seconds
     private Handler handler;
     private Runnable runnable;
 
     private OkHttpClient client = new OkHttpClient();
-    boolean flag = true;
+    boolean hazardLightFlag = false;
+    boolean headLightFlag = false;
+    boolean carSensorFlag = true;
+    boolean leftIndicatorFlag = false;
+    boolean rightIndicatorFlag = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +68,12 @@ public class MainActivity extends AppCompatActivity implements FetchData.DataLis
         responseMsgTv = findViewById(R.id.response_message_tv);
         keyEdt = findViewById(R.id.key_edt);
         startBtn = findViewById(R.id.start_btn);
+        emergencyLightBtn = findViewById(R.id.emergency_light_btn);
+        hazardLightBtn = findViewById(R.id.hazard_light_btn);
+        frontLightBtn = findViewById(R.id.head_light_btn);
+        carSensorBtn = findViewById(R.id.sensor_light_btn);
+        leftIndicatorBtn = findViewById(R.id.left_indicator_btn);
+        rightIndicatorBtn = findViewById(R.id.right_indicator_btn);
 
         handler = new Handler();
         runnable = new Runnable() {
@@ -73,6 +90,93 @@ public class MainActivity extends AppCompatActivity implements FetchData.DataLis
             public void onClick(View v) {
                 String key = startBtn.getText().toString();
                 sendDataToESP32(CAR_START_KEY_URL, key);
+            }
+        });
+
+        leftIndicatorBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (rightIndicatorFlag) {
+                    //sendRequest(RIGHT_INDICATOR_URL);
+                    rightIndicatorBtn.setImageResource(R.drawable.right_indicator_off_icon);
+                    rightIndicatorFlag = false;
+                }
+
+                if (!leftIndicatorFlag) {
+                    sendRequest(LEFT_INDICATOR_URL);
+                    leftIndicatorBtn.setImageResource(R.drawable.left_indicator_on_icon);
+                    leftIndicatorFlag = true;
+                } else {
+                    sendRequest(LEFT_INDICATOR_URL);
+                    leftIndicatorBtn.setImageResource(R.drawable.left_indicator_off_icon);
+                    leftIndicatorFlag = false;
+                }
+            }
+        });
+
+        rightIndicatorBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (leftIndicatorFlag) {
+                    //sendRequest(LEFT_INDICATOR_URL);
+                    leftIndicatorFlag = false;
+                    leftIndicatorBtn.setImageResource(R.drawable.left_indicator_off_icon);
+                }
+
+                if (!rightIndicatorFlag) {
+                    sendRequest(RIGHT_INDICATOR_URL);
+                    rightIndicatorBtn.setImageResource(R.drawable.right_indicator_on_icon);
+                    rightIndicatorFlag = true;
+                } else {
+                    sendRequest(RIGHT_INDICATOR_URL);
+                    rightIndicatorBtn.setImageResource(R.drawable.right_indicator_off_icon);
+                    rightIndicatorFlag = false;
+                }
+            }
+        });
+
+        frontLightBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!headLightFlag) {
+                    sendRequest(HEAD_LIGHT_ON_URL);
+                    frontLightBtn.setImageResource(R.drawable.car_head_light_on);
+                    headLightFlag = true;
+                } else {
+                    sendRequest(HEAD_LIGHT_OFF_URL);
+                    frontLightBtn.setImageResource(R.drawable.car_head_light_off);
+                    headLightFlag = false;
+                }
+            }
+        });
+
+        carSensorBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (carSensorFlag) {
+                    sendRequest(CAR_SENSOR_URL);
+                    carSensorBtn.setImageResource(R.drawable.car_sensor_off);
+                    carSensorFlag = false;
+                } else {
+                    sendRequest(CAR_SENSOR_URL);
+                    carSensorBtn.setImageResource(R.drawable.car_sensor_on);
+                    carSensorFlag = true;
+                }
+            }
+        });
+
+        hazardLightBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!hazardLightFlag) {
+                    sendRequest(HAZARD_LIGHT_URL);
+                    hazardLightBtn.setImageResource(R.drawable.hazard_light_on_icon);
+                    hazardLightFlag = true;
+                } else {
+                    sendRequest(HAZARD_LIGHT_URL);
+                    hazardLightBtn.setImageResource(R.drawable.hazard_light_off_icon);
+                    hazardLightFlag = false;
+                }
             }
         });
 
@@ -203,12 +307,14 @@ public class MainActivity extends AppCompatActivity implements FetchData.DataLis
     public void onDataReceived(String data) {
         if (data != null) {
             if (data.toLowerCase().trim().equals("enabled")) {
+                emergencyLightBtn.setImageResource(R.drawable.emergency_red_icon);
                 frontBtn.setEnabled(false);
                 backBtn.setEnabled(false);
                 leftBtn.setEnabled(false);
                 rightBtn.setEnabled(false);
                 responseMsgTv.setText("Emergency stop activated. Car will not run.");
             } else if (data.toLowerCase().trim().equals("disabled")) {
+                emergencyLightBtn.setImageResource(R.drawable.emergency_black_icon);
                 frontBtn.setEnabled(true);
                 backBtn.setEnabled(true);
                 leftBtn.setEnabled(true);
